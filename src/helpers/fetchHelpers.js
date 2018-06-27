@@ -1,5 +1,3 @@
-'use strict';
-
 const errorHandler = response => response.ok
     ? response
     : Promise.reject(response);
