@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import qs from "qs";
 
 import Button from 'gumdrops/Button';
 import LayoutContainer from 'gumdrops/LayoutContainer';
@@ -13,15 +14,19 @@ import SearchForm from './SearchForm'
 
 const API_BASE_URL = 'http://localhost:3000';
 const COLUMNS = [
-    { name: 'id', label: 'ID' },
-    { name: 'title', label: 'Title' },
-    { name: 'created_at', label: 'Created At' }
+    { name: 'stage', label: 'Stage' },
+    { name: 'name', label: 'Name' },
+    { name: 'content', label: 'Content' },
+    { name: 'createdAt', label: 'Created At' }
 ]
 
 class ContractManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchQuery: {
+                name: ''
+            },
             contracts: [],
             stages: []
         }
@@ -33,18 +38,21 @@ class ContractManager extends Component {
     }
 
     _fetchContracts = () => {
-        return fetch(`${API_BASE_URL}/contracts`)
+        return fetch(`${API_BASE_URL}/contracts?${qs.stringify(this.state.searchQuery)}`)
             .then(errorHandler)
             .then(parseResponse)
             .then(
                 response => {
-                    this.setState({
+                    this.setState(prevState => ({
+                        ...prevState,
                         contracts: response
-                    })
+                    }))
                 },
-                error => error.json().then(errorBody => {
+            error => {
+                console.log('contracts fetch error : ', error);
+                error.json().then(errorBody => {
 
-                })
+                })}
             )
     }
 
@@ -54,14 +62,27 @@ class ContractManager extends Component {
             .then(parseResponse)
             .then(
                 response => {
-                    this.setState({
+                    this.setState(prevState => ({
+                        ...prevState,
                         stages: response
-                    })
+                    }))
                 },
-                error => error.json().then(errorBody => {
-
-                })
+                error => {
+                    console.log('stages fetch error : ', error);
+                    error.json().then(errorBody => {
+                })}
             )
+    }
+
+    _onInputChange = ({ target }) => {
+        const { name, value } = target;
+        this.setState(prevState => ({
+            ...prevState,
+            searchQuery: {
+                ...prevState.searchQuery,
+                [name]: value
+            }
+        }))
     }
 
     _onCreateClick = () => {
@@ -70,7 +91,8 @@ class ContractManager extends Component {
 
     render() {
         const {
-            contracts
+            contracts,
+            searchQuery
         } = this.state;
 
         return (
@@ -86,7 +108,11 @@ class ContractManager extends Component {
                             </div>
                             <Card>
                                 <CardBlock>
-                                    <SearchForm />
+                                    <SearchForm
+                                        formData={searchQuery}
+                                        onChange={this._onInputChange}
+                                        onSearch={this._fetchContracts}
+                                    />
                                 </CardBlock>
                                 <CardBlock>
                                     {contracts && contracts.length > 0 &&

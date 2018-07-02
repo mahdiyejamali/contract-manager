@@ -10,7 +10,9 @@ import FormGroupLabel from 'gumdrops/FormGroupLabel';
 import TextInput from 'gumdrops/TextInput';
 
 const SearchForm = ({
-    formData
+    formData,
+    onChange,
+    onSearch
 }) => {
     return (
         <div className="-m-b-3">
@@ -19,10 +21,10 @@ const SearchForm = ({
                     <FormGroup>
                         <FormGroupLabel text="Title"/>
                         <TextInput
-                            placeholder="Title"
-                            name="title"
-                            value={''}
-                            onChange={() => {}}
+                            placeholder="Name"
+                            name="name"
+                            defaultValue={formData.name}
+                            onChange={onChange}
                         />
                     </FormGroup>
                 </Column>
@@ -32,7 +34,7 @@ const SearchForm = ({
                             group
                             size="md"
                             context="primary"
-                            onClick={() => {}}
+                            onClick={onSearch}
                         >
                             Search
                         </Button>

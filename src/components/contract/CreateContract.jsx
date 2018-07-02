@@ -14,6 +14,7 @@ import TextArea from 'gumdrops/TextArea';
 import SignaturePad from 'react-signature-pad';
 
 import { errorHandler, parseResponse } from "../../helpers/fetchHelpers.js";
+import defaultData from '../../constants/defaultData.js';
 
 const API_BASE_URL = 'http://localhost:3000';
 
@@ -30,6 +31,13 @@ class CreateContract extends Component {
     }
 
     _onSave = () => {
+        const query = {
+            ...this.state.query,
+            owner_id: defaultData.user._id,
+            client_id: defaultData.client._id,
+            reviewer_id: defaultData.user._id,
+            executor_id: defaultData.user._id
+        }
         fetch(`${API_BASE_URL}/contracts`, {
             credentials: 'same-origin',
             method: 'POST',
@@ -37,17 +45,16 @@ class CreateContract extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(this.state.query)
+            body: JSON.stringify(query)
         })
             .then(errorHandler)
             .then(parseResponse)
             .then(
                 response => {
-                    console.log(response);
                     this._onBackClick();
                 },
                 error => error.json().then(errorBody => {
-                    console.log(errorBody);
+                    console.log('save contract error : ', errorBody);
                 })
             );
     }
@@ -80,10 +87,10 @@ class CreateContract extends Component {
                                         <Row>
                                             <Column md="12">
                                                 <FormGroup>
-                                                    <FormGroupLabel text="Title" />
+                                                    <FormGroupLabel text="Name" />
                                                     <TextInput
-                                                        placeholder="Title"
-                                                        name="title"
+                                                        placeholder="Name"
+                                                        name="name"
                                                         defaultValue={query.title}
                                                         onChange={this._onInputChange}
                                                     />
