@@ -19,7 +19,7 @@ const SearchForm = ({
             <Row>
                 <Column md="4">
                     <FormGroup>
-                        <FormGroupLabel text="Title"/>
+                        <FormGroupLabel text="Name"/>
                         <TextInput
                             placeholder="Name"
                             name="name"
