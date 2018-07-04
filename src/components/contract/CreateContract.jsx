@@ -28,9 +28,9 @@ class CreateContract extends Component {
         super(props);
         this.state = {
             query: {
-                name: '', entity_name: '', mailing_address: '', primary_contact_name: '', primary_contact_title: '',
-                primary_contact_phone: '', primary_contact_email: '', billing_contact: '', billing_phone: '',
-                billing_email: '', services: '', valuation_period: '', total_fee: ''
+                name: 'aaa', entity_name: 'aaa', mailing_address: 'aaa', primary_contact_name: 'aaa', primary_contact_title: 'aaa',
+                primary_contact_phone: 'aaa', primary_contact_email: 'aaa', billing_contact: 'aaa', billing_phone: 'aaa',
+                billing_email: 'aaa', services: 'aaa', valuation_period: 'aaa', total_fee: 'aaa'
             },
             errors: {}
         }
