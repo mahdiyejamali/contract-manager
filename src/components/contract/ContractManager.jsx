@@ -7,6 +7,7 @@ import Row from 'gumdrops/Row';
 import Column from 'gumdrops/Column';
 import Card from 'gumdrops/Card';
 import CardBlock from 'gumdrops/CardBlock';
+import Well from 'gumdrops/Well';
 
 import { errorHandler, parseResponse } from "../../helpers/fetchHelpers.js";
 import EntriesList from '../common/EntriesList'
@@ -16,7 +17,6 @@ const API_BASE_URL = 'http://localhost:3000';
 const COLUMNS = [
     { name: 'stage', label: 'Stage' },
     { name: 'name', label: 'Name' },
-    { name: 'content', label: 'Content' },
     { name: 'createdAt', label: 'Created At' }
 ]
 
@@ -28,13 +28,16 @@ class ContractManager extends Component {
                 name: ''
             },
             contracts: [],
-            stages: []
+            stages: [],
+            errors: {
+                no_contracts: 'There are no contarcts in the system yet.'
+            }
         }
     }
 
     componentDidMount() {
         this._fetchContracts();
-        this._fetchStages();
+        //this._fetchStages();
     }
 
     _fetchContracts = () => {
@@ -89,14 +92,19 @@ class ContractManager extends Component {
         this.props.history.push('/create');
     }
 
+    _openContract = (id) => {
+        this.props.history.push(`/contract/${id}`);
+    }
+
     render() {
         const {
             contracts,
-            searchQuery
+            searchQuery,
+            errors
         } = this.state;
 
         return (
-            <div>
+            <div className="-p-t-3">
                 <LayoutContainer>
                     <Row>
                         <Column>
@@ -115,10 +123,14 @@ class ContractManager extends Component {
                                     />
                                 </CardBlock>
                                 <CardBlock>
+                                    {contracts.length === 0 && 
+                                        <Well text={errors.no_contracts} button context="danger" className="-m-b-2" />
+                                    }
                                     {contracts && contracts.length > 0 &&
                                         <EntriesList
                                             entries={contracts}
                                             columns={COLUMNS}
+                                            onClick={this._openContract}
                                         />
                                     }
                                 </CardBlock>

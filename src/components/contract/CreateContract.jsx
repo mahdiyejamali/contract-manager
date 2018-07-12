@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import Button from 'gumdrops/Button';
 import LayoutContainer from 'gumdrops/LayoutContainer';
 import Row from 'gumdrops/Row';
@@ -10,29 +11,38 @@ import FormGroup from 'gumdrops/FormGroup';
 import FormGroupLabel from 'gumdrops/FormGroupLabel';
 import TextInput from 'gumdrops/TextInput';
 import FormGroupTextHelp from 'gumdrops/FormGroupTextHelp';
-
-import SignaturePad from 'react-signature-pad';
+import Select from 'gumdrops/Select';
+import DateInput from '../common/DateInput.jsx';
 
 import { errorHandler, parseResponse } from "../../helpers/fetchHelpers.js";
-import defaultData from '../../constants/defaultData.js';
+import data from '../../constants/data.js';
 
 const API_BASE_URL = 'http://localhost:3000';
 const REQUIRED_FIELDS = [
-    'name', 'entity_name', 'mailing_address', 'primary_contact_name', 'primary_contact_title',
-    'primary_contact_phone', 'primary_contact_email', 'billing_contact', 'billing_phone',
-    'billing_email', 'services', 'valuation_period', 'total_fee'
+    'name', 'start_date', 'end_date', 'total_fee'
 ]
+const YMD = 'YYYY-MM-DD';
+const TODAY = moment().format(YMD);
+const NEXT_MONTH_TODAY = moment().add(1, 'months').format(YMD);
 
 class CreateContract extends Component {
     constructor(props) {
         super(props);
         this.state = {
             query: {
-                name: 'aaa', entity_name: 'aaa', mailing_address: 'aaa', primary_contact_name: 'aaa', primary_contact_title: 'aaa',
-                primary_contact_phone: 'aaa', primary_contact_email: 'aaa', billing_contact: 'aaa', billing_phone: 'aaa',
-                billing_email: 'aaa', services: 'aaa', valuation_period: 'aaa', total_fee: 'aaa'
+                name: '', 
+                start_date: '', 
+                end_date: '', 
+                total_fee: '',
+                start_date: TODAY,
+                end_date: NEXT_MONTH_TODAY
             },
-            errors: {}
+            users: data.users,
+            clients: data.clients,
+            contract_types: data.contract_types,
+            errors: {},
+            min_date: null,
+            max_date: null,
         }
     }
 
@@ -44,12 +54,14 @@ class CreateContract extends Component {
         let query = this.state.query;
         let errors = {};
         Object.keys(query).forEach(key => {
-            query[key] = query[key].trim();
-
-            if (!query[key]) {
+            if (!query[key] || !query[key].trim()) {
                 errors[key] = 'This field is required';
             }
         });
+
+        if (parseInt(query.total_fee) <= 0) {
+            errors.total_fee = 'Total fee can not be less than or equal to zero.'
+        }
 
         this.setState({
             query,
@@ -62,16 +74,17 @@ class CreateContract extends Component {
     _onSave = () => {
         const errors = this._validateFields();
 
+        console.log(errors);
+
         if (Object.keys(errors).length > 0) {
             return false;
         }
 
         const query = {
             ...this.state.query,
-            owner_id: defaultData.user._id,
-            client_id: defaultData.client._id,
-            reviewer_id: defaultData.user._id,
-            executor_id: defaultData.user._id
+            owner_id: '1',
+            client_id: '11',
+            executor_id: '1'
         }
         fetch(`${API_BASE_URL}/contracts`, {
             credentials: 'same-origin',
@@ -106,10 +119,27 @@ class CreateContract extends Component {
         }))
     }
 
+    _handleDateChange = (date, field) => {
+        this.setState(prevState => ({
+            ...prevState,
+            query: {
+                ...prevState.query,
+                [field]: date ? date.format(YMD) : null
+            },
+            errors: {
+                [field]: ''
+            }
+        }));
+    };
+
+    _onTypeChange = () => {
+
+    }
+
     render() {
-        const { query, errors } = this.state;
+        const { users, clients, contract_types, query, errors, query: { start_date, end_date }, min_date, max_date } = this.state;
         return (
-            <div>
+            <div className="-p-t-3">
                 <LayoutContainer>
                     <Row>
                         <Column>
@@ -124,6 +154,19 @@ class CreateContract extends Component {
                                         <Row>
                                             <Column md="12">
                                                 <FormGroup>
+                                                    <FormGroupLabel text="Contract Type" />
+                                                    <Select
+                                                        placeholder="Type Of Contract"
+                                                        name="type"
+                                                        options={contract_types}
+                                                        onChange={this._onTypeChange}
+                                                    />
+                                                </FormGroup>
+                                            </Column>
+                                        </Row>
+                                        <Row>
+                                            <Column md="6">
+                                                <FormGroup>
                                                     <FormGroupLabel text="Contract Name" />
                                                     <TextInput
                                                         placeholder="Contract Name"
@@ -133,172 +176,6 @@ class CreateContract extends Component {
                                                     />
                                                     {errors && errors.name &&
                                                         <FormGroupTextHelp text={errors.name} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                        </Row>
-                                        <Row>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Entity Name" />
-                                                    <TextInput
-                                                        placeholder="Entity Name"
-                                                        name="entity_name"
-                                                        defaultValue={query.entity_name}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.entity_name &&
-                                                        <FormGroupTextHelp text={errors.entity_name} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Mailing Address" />
-                                                    <TextInput
-                                                        placeholder="Mailing Address"
-                                                        name="mailing_address"
-                                                        defaultValue={query.mailing_address}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.mailing_address &&
-                                                        <FormGroupTextHelp text={errors.mailing_address} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                        </Row>
-                                        <Row>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Primary Contact Name" />
-                                                    <TextInput
-                                                        placeholder="Primary Contact Name"
-                                                        name="primary_contact_name"
-                                                        defaultValue={query.primary_contact_name}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.primary_contact_name &&
-                                                        <FormGroupTextHelp text={errors.primary_contact_name} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Primary Contact Title" />
-                                                    <TextInput
-                                                        placeholder="Primary Contact Title"
-                                                        name="primary_contact_title"
-                                                        defaultValue={query.primary_contact_title}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.primary_contact_title &&
-                                                        <FormGroupTextHelp text={errors.primary_contact_title} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                        </Row>
-                                        <Row>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Primary Contact Phone" />
-                                                    <TextInput
-                                                        placeholder="Primary Contact Phone"
-                                                        name="primary_contact_phone"
-                                                        defaultValue={query.primary_contact_phone}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.primary_contact_phone &&
-                                                        <FormGroupTextHelp text={errors.primary_contact_phone} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Primary Contact Email" />
-                                                    <TextInput
-                                                        placeholder="Primary Contact Email"
-                                                        name="primary_contact_email"
-                                                        defaultValue={query.primary_contact_email}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.primary_contact_email &&
-                                                        <FormGroupTextHelp text={errors.primary_contact_email} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                        </Row>
-                                        <Row>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Billing Contact" />
-                                                    <TextInput
-                                                        placeholder="Billing Contact"
-                                                        name="billing_contact"
-                                                        defaultValue={query.billing_contact}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.billing_contact &&
-                                                        <FormGroupTextHelp text={errors.billing_contact} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Billing Phone" />
-                                                    <TextInput
-                                                        placeholder="Billing Phone"
-                                                        name="billing_phone"
-                                                        defaultValue={query.billing_phone}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.billing_phone &&
-                                                        <FormGroupTextHelp text={errors.billing_phone} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                        </Row>
-                                        <Row>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Billing Email" />
-                                                    <TextInput
-                                                        placeholder="Billing Email"
-                                                        name="billing_email"
-                                                        defaultValue={query.billing_email}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.billing_email &&
-                                                        <FormGroupTextHelp text={errors.billing_email} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="The Services" />
-                                                    <TextInput
-                                                        placeholder="The Services"
-                                                        name="services"
-                                                        defaultValue={query.services}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.services &&
-                                                        <FormGroupTextHelp text={errors.services} />
-                                                    }
-                                                </FormGroup>
-                                            </Column>
-                                        </Row>
-                                        <Row>
-                                            <Column md="6">
-                                                <FormGroup>
-                                                    <FormGroupLabel text="Valuation Period" />
-                                                    <TextInput
-                                                        placeholder="Valuation Period"
-                                                        name="valuation_period"
-                                                        defaultValue={query.valuation_period}
-                                                        onChange={this._onInputChange}
-                                                    />
-                                                    {errors && errors.valuation_period &&
-                                                        <FormGroupTextHelp text={errors.valuation_period} />
                                                     }
                                                 </FormGroup>
                                             </Column>
@@ -318,7 +195,59 @@ class CreateContract extends Component {
                                             </Column>
                                         </Row>
                                         <Row>
-                                            <Column md="3" style={{ marginTop: '0.8em' }}>
+                                            <Column md="6">
+                                                <FormGroup>
+                                                    <FormGroupLabel text="Client" />
+                                                    <Select
+                                                        placeholder="Client"
+                                                        name="client_id"
+                                                        options={clients}
+                                                        onChange={this._onInputChange}
+                                                    />
+                                                </FormGroup>
+                                            </Column>
+                                            <Column md="6">
+                                                <FormGroup>
+                                                    <FormGroupLabel text="Executor" />
+                                                    <Select
+                                                        placeholder="Executor"
+                                                        name="executor_id"
+                                                        options={users}
+                                                        onChange={this._onInputChange}
+                                                    />
+                                                </FormGroup>
+                                            </Column>
+                                        </Row>
+                                        <Row>
+                                            <Column md="3">
+                                                <FormGroup>
+                                                    <DateInput
+                                                        title="Start Date"
+                                                        selected={start_date && moment(start_date, YMD)}
+                                                        onChange={(date) => this._handleDateChange(date, 'start_date')}
+                                                        minDate={min_date}
+                                                        isClearable={false}
+                                                    />
+                                                    {errors && errors.start_date &&
+                                                        <FormGroupTextHelp text={errors.start_date} />
+                                                    }
+                                                </FormGroup>
+                                            </Column>
+                                            <Column md="3">
+                                                <FormGroup>
+                                                    <DateInput
+                                                        title="End Date"
+                                                        selected={end_date && moment(end_date, YMD)}
+                                                        onChange={(date) => this._handleDateChange(date, 'end_date')}
+                                                        minDate={min_date}
+                                                        isClearable={false}
+                                                    />
+                                                    {errors && errors.end_date &&
+                                                        <FormGroupTextHelp text={errors.end_date} />
+                                                    }
+                                                </FormGroup>
+                                            </Column>
+                                            <Column md="6" style={{ marginTop: '1.9em' }}>
                                                 <ButtonGroup>
                                                     <Button
                                                         group
@@ -327,7 +256,7 @@ class CreateContract extends Component {
                                                         onClick={this._onSave}
                                                     >
                                                         <i className="fa fa-check -m-r-2" />
-                                                        Create
+                                                        Create and Submit
                                                     </Button>
                                                 </ButtonGroup>
                                             </Column>

@@ -4630,6 +4630,10 @@ mkdirp@0.5.1, mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
+moment@^2.22.2:
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5713,9 +5717,20 @@ react-dom@^16.4.1:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+react-edit-inline@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-edit-inline/-/react-edit-inline-1.0.8.tgz#d144670b5217b5adc6c5bcb6976fc6b257f09b72"
+
 react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
+
+react-inline-editing@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/react-inline-editing/-/react-inline-editing-1.0.10.tgz#0e2b89c03f8506e8d02feccf66a658dd809a8dfd"
+  dependencies:
+    prop-types "^15.6.0"
+    react "^16.2.0"
 
 react-lifecycles-compat@^3.0.0:
   version "3.0.4"
@@ -5813,7 +5828,7 @@ react-signature-pad@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-signature-pad/-/react-signature-pad-0.0.6.tgz#335547c1f523a36b8396e5365e2f49521e56b9cf"
 
-react@^16.4.1:
+react@^16.2.0, react@^16.4.1:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.4.1.tgz#de51ba5764b5dbcd1f9079037b862bd26b82fe32"
   dependencies:

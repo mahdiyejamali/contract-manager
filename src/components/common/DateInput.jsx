@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import DateFormGroup from './DateFormGroup.jsx';
 
-const DateInput = ({ selected, onChange, title, minDate, maxDate, size }) => (
+const DateInput = ({ selected, onChange, title, minDate, maxDate, size, isClearable }) => (
     <DatePicker
         title={title}
         customInput={<DateFormGroup size={size} />}
@@ -12,12 +12,13 @@ const DateInput = ({ selected, onChange, title, minDate, maxDate, size }) => (
         onChange={onChange}
         minDate={minDate}
         maxDate={maxDate}
-        isClearable
+        isClearable={isClearable}
     />
 );
 
 DateInput.defaultProps = {
-    size: "md"
+    size: "md",
+    isClearable: true
 };
 
 DateInput.propTypes = {
@@ -26,7 +27,8 @@ DateInput.propTypes = {
     minDate: PropTypes.object,
     maxDate: PropTypes.object,
     title: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.string,
+    isClearable: PropTypes.bool
 };
 
 export default DateInput;

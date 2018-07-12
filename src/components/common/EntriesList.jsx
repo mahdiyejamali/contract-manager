@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import data from '../../constants/data.js';
 
 /**
  * @param columns
@@ -14,7 +15,8 @@ const EntriesList = ({
     columns,
     entries,
     tableClassName,
-    size
+    size,
+    onClick
 }) => {
     const tableCustomClassName = `gds-table gds-table--${size} ${tableClassName}`;
     return (
@@ -31,9 +33,16 @@ const EntriesList = ({
                 {
                     entries && entries.map((entry, rowIndex) => {
                         return (
-                            <tr key={entry.id ? entry.id : rowIndex} className="gds-table__row">
+                            <tr key={entry._id ? entry._id : rowIndex} className="gds-table__row" onClick={() => onClick(entry._id)}>
                                 {
-                                    columns.map((column, colIndex) => <td key={ colIndex } >{entry[column.name]}</td>)
+                                    columns.map((column, colIndex) => {
+                                        if (column.name === 'stage') {
+                                            const stage = data.stages.find(item => item.stage === entry.stage);
+                                            return <td key={colIndex} style={{ width: '300px'}}><div className={`gds-tag gds-tag--xs ${stage.class}`} style={{ width: '150px', minWidth: '150px' }}>{stage.description}</div></td>
+                                        } else {
+                                            return <td key={colIndex} >{entry[column.name]}</td>
+                                        }
+                                    })
                                 }
                             </tr>
                         );
@@ -58,7 +67,8 @@ EntriesList.propTypes = {
     })).isRequired,
     entries: PropTypes.arrayOf(PropTypes.object),
     tableClassName: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.string,
+    onClick: PropTypes.func
 };
 
 export default EntriesList;

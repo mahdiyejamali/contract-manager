@@ -7,7 +7,7 @@ import Button from 'gumdrops/Button';
 
 const DateFormGroup = ({ value, onClick, title, size }) => (
     <FormGroup>
-        <FormGroupLabel text={title} />
+        {title && <FormGroupLabel text={title} />}
         <div className="gds-form-group__input-group">
             <TextInput
                 className="gds-form-group__text-input--right-edge"
