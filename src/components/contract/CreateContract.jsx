@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import Highlighter from 'react-highlight-words';
 import Button from 'gumdrops/Button';
 import LayoutContainer from 'gumdrops/LayoutContainer';
 import Row from 'gumdrops/Row';
@@ -10,9 +11,14 @@ import ButtonGroup from 'gumdrops/ButtonGroup';
 import FormGroup from 'gumdrops/FormGroup';
 import FormGroupLabel from 'gumdrops/FormGroupLabel';
 import TextInput from 'gumdrops/TextInput';
+import TextArea from 'gumdrops/TextArea';
 import FormGroupTextHelp from 'gumdrops/FormGroupTextHelp';
 import Select from 'gumdrops/Select';
 import DateInput from '../common/DateInput.jsx';
+
+import {NotificationContainer} from 'react-notifications';
+import createNotification from '../common/Notification.jsx';
+import 'react-notifications/lib/notifications.css';
 
 import { errorHandler, parseResponse } from "../../helpers/fetchHelpers.js";
 import data from '../../constants/data.js';
@@ -25,6 +31,26 @@ const YMD = 'YYYY-MM-DD';
 const TODAY = moment().format(YMD);
 const NEXT_MONTH_TODAY = moment().add(1, 'months').format(YMD);
 
+const deliverablesClauses = {
+    'warning1': 1,
+    'warning6': 6,
+    'error8': 8,
+    'error9': 9
+}
+const deliverablesMaxRisk = 7;
+const colorCodes = {
+    1: '#FCF3CF',
+    2: '#FCF3CF',
+    3: '#F9E79F',
+    4: '#F9E79F',
+    5: '#F8C471',
+    6: '#F8C471',
+    7: '#EB984E',
+    8: '#E59866',
+    9: '#DC7633',
+    10: '#DC7633'
+}
+
 class CreateContract extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +60,7 @@ class CreateContract extends Component {
                 start_date: '', 
                 end_date: '', 
                 total_fee: '',
+                deliverables: '',
                 start_date: TODAY,
                 end_date: NEXT_MONTH_TODAY
             },
@@ -43,6 +70,8 @@ class CreateContract extends Component {
             errors: {},
             min_date: null,
             max_date: null,
+            showDeliverablesDiv: true,
+            highlightedDeliverables: ''
         }
     }
 
@@ -53,11 +82,16 @@ class CreateContract extends Component {
     _validateFields = () => {
         let query = this.state.query;
         let errors = {};
-        Object.keys(query).forEach(key => {
+        REQUIRED_FIELDS.forEach(key => {
             if (!query[key] || !query[key].trim()) {
                 errors[key] = 'This field is required';
             }
         });
+
+        if (!query.deliverables || !query.deliverables.trim()) {
+            createNotification('error', 'Please fill out deliverables section.');
+            errors.deliverables = 'This field is required';
+        }
 
         if (parseInt(query.total_fee) <= 0) {
             errors.total_fee = 'Total fee can not be less than or equal to zero.'
@@ -71,12 +105,61 @@ class CreateContract extends Component {
         return errors;
     };
 
+    // _getHighlighted(text, higlight) {
+    //     const ratio = deliverablesClauses[higlight];
+    //     console.log(ratio);
+    //     const color = colorCodes[ratio] ? colorCodes[ratio] : '';
+    //     console.log(color);
+    //     // Split on higlight term and include term into parts, ignore case
+    //     let parts = text.split(new RegExp(`(${higlight})`, 'gi'));
+    //     const result = <span> {parts.map((part, i) =>
+    //         <span key={i} style={part.toLowerCase() === higlight.toLowerCase() ? { backgroundColor: `${color}` } : {}}>
+    //             {part}
+    //         </span>)
+    //     } </span>;
+    //     return result;
+    // }
+
+    _updateHighlightColors = () => {
+        let domNodes = document.getElementsByClassName('YourHighlightClass');
+    }
+
+    _findDeliverablesClauses = () => {
+        let text = this.state.query['deliverables'];
+        let foundClauses = [];
+        // Find the clauses that have warning or error
+        Object.keys(deliverablesClauses).forEach(clause => {
+            if (text.indexOf(clause) !== -1) {
+                foundClauses.push(clause);
+            }
+        });
+        // Return a list of clauses in the text with risk ratio >= maxLimit
+        return foundClauses;
+    }
+
+    _toggleDeliverablesDiv = () => {
+        this._updateHighlightColors();
+        this.setState(prevState => ({
+            ...prevState,
+            showDeliverablesDiv: !prevState.showDeliverablesDiv
+        }))
+    }
+
     _onSave = () => {
         const errors = this._validateFields();
-
-        console.log(errors);
-
         if (Object.keys(errors).length > 0) {
+            return false;
+        }
+
+        // Check clauses
+        const foundClauses = this._findDeliverablesClauses();
+        const errorClauses = foundClauses.filter(clause => deliverablesClauses[clause] >= deliverablesMaxRisk);
+        const warningClauses = foundClauses.filter(clause => deliverablesClauses[clause] < deliverablesMaxRisk);;
+        if (warningClauses.length > 0) {
+            createNotification('warning', warningClauses.join(', '), 'Warning In Deliverables');
+        }
+        if (errorClauses.length > 0) {
+            createNotification('error', errorClauses.join(', '), 'Error In Deliverables');
             return false;
         }
 
@@ -137,12 +220,13 @@ class CreateContract extends Component {
     }
 
     render() {
-        const { users, clients, contract_types, query, errors, query: { start_date, end_date }, min_date, max_date } = this.state;
+        const { users, clients, contract_types, query, errors, query: { start_date, end_date, deliverables }, min_date, showDeliverablesDiv } = this.state;
         return (
             <div className="-p-t-3">
                 <LayoutContainer>
                     <Row>
                         <Column>
+                            <NotificationContainer />
                             <div className="gds-flex gds-flex--justify-between">
                                 <Button size="sm" context="success" onClick={this._onBackClick}>
                                     Home
@@ -215,6 +299,41 @@ class CreateContract extends Component {
                                                         options={users}
                                                         onChange={this._onInputChange}
                                                     />
+                                                </FormGroup>
+                                            </Column>
+                                        </Row>
+                                        <Row>
+                                            <Column md="12">
+                                                <center style={{ fontWeight: 'bold', paddingTop: '20px' }}>Exhibit B: Description of Services<br /></center>
+                                            </Column>
+                                        </Row>
+                                        <Row>
+                                            <Column md="12">
+                                                <FormGroup>
+                                                    <FormGroupLabel text="Deliverables" />
+                                                    {showDeliverablesDiv ? 
+                                                    <div
+                                                        onDoubleClick={this._toggleDeliverablesDiv}
+                                                        style={{ border: '1px solid', height: '200px', padding: '10px'}}
+                                                    >  
+                                                    <Highlighter
+                                                        highlightClassName="YourHighlightClass"
+                                                        highlightStyle={{backgroundColor: 'yellow'}}
+                                                        searchWords={Object.keys(deliverablesClauses)}
+                                                        autoEscape={true}
+                                                        textToHighlight={deliverables}
+                                                    />
+                                                    </div> : 
+                                                    <TextArea
+                                                        placeholder="[INSERT SCOPE OF DELIVERABLES]"
+                                                        name="deliverables"
+                                                        defaultValue={deliverables}
+                                                        onChange={this._onInputChange}
+                                                        onBlur={this._toggleDeliverablesDiv}
+                                                        style={{height: '200px'}}
+                                                        className={showDeliverablesDiv ? '-vis-hidden' : ''}
+                                                    />
+                                                    }
                                                 </FormGroup>
                                             </Column>
                                         </Row>
