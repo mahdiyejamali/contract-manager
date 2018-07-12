@@ -1,6 +1,9 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import data from '../../constants/data.js';
+
+const YMD = 'YYYY-MM-DD';
 
 /**
  * @param columns
@@ -39,6 +42,9 @@ const EntriesList = ({
                                         if (column.name === 'stage') {
                                             const stage = data.stages.find(item => item.stage === entry.stage);
                                             return <td key={colIndex} style={{ width: '300px'}}><div className={`gds-tag gds-tag--xs ${stage.class}`} style={{ width: '150px', minWidth: '150px' }}>{stage.description}</div></td>
+                                        } else if (column.name === 'createdAt') {
+                                            const createdAt = entry.createdAt && moment(entry.createdAt).format(YMD);
+                                            return <td key={colIndex} >{createdAt}</td>
                                         } else {
                                             return <td key={colIndex} >{entry[column.name]}</td>
                                         }

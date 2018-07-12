@@ -15,7 +15,7 @@ const SearchForm = ({
     onSearch
 }) => {
     return (
-        <div className="-m-b-3">
+        <div className="">
             <Row>
                 <Column md="4">
                     <FormGroup>
@@ -25,6 +25,7 @@ const SearchForm = ({
                             name="name"
                             defaultValue={formData.name}
                             onChange={onChange}
+                            size="sm"
                         />
                     </FormGroup>
                 </Column>
@@ -35,6 +36,7 @@ const SearchForm = ({
                             size="md"
                             context="primary"
                             onClick={onSearch}
+                            size="sm"
                         >
                             Search
                         </Button>

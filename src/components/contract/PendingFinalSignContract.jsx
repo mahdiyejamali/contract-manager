@@ -13,7 +13,7 @@ import TextInput from 'gumdrops/TextInput';
 import DateInput from '../common/DateInput.jsx';
 
 const FONT_FAMILY = '-webkit-pictograph';
-const SIGN_FONT_FAMILY = 'cursive';
+const SIGN_FONT_FAMILY = 'Quintessential';
 const YMD = 'YYYY-MM-DD';
 const TODAY = moment().format(YMD);
 

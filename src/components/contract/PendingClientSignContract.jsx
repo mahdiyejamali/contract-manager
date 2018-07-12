@@ -12,7 +12,7 @@ import TextInput from 'gumdrops/TextInput';
 import DateInput from '../common/DateInput.jsx';
 
 const FONT_FAMILY = '-webkit-pictograph';
-const SIGN_FONT_FAMILY = 'cursive';
+const SIGN_FONT_FAMILY = 'Quintessential';
 const YMD = 'YYYY-MM-DD';
 
 const tableThStyle={ height: '', width: '20%' };
@@ -59,6 +59,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Full Legal Entity Name"
                                                                 name="entity_name"
+                                                                defaultValue={query.entity_name}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -71,6 +72,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Mailing Address"
                                                                 name="mailing_address"
+                                                                defaultValue={query.mailing_address}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -83,6 +85,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Primary Contact Name"
                                                                 name="contact_name"
+                                                                defaultValue={query.contact_name}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -95,6 +98,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Primary Contact Title"
                                                                 name="contact_title"
+                                                                defaultValue={query.contact_title}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -107,6 +111,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Primary Contact Phone"
                                                                 name="contact_phone"
+                                                                defaultValue={query.contact_phone}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -119,6 +124,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Primary Contact Email"
                                                                 name="contact_email"
+                                                                defaultValue={query.contact_email}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -131,6 +137,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Billing Contact"
                                                                 name="billing_contact"
+                                                                defaultValue={query.billing_contact}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -143,6 +150,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Billing Phone"
                                                                 name="billing_phone"
+                                                                defaultValue={query.billing_phone}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -155,6 +163,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder="Billing Email"
                                                                 name="billing_email"
+                                                                defaultValue={query.billing_email}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -201,6 +210,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder=""
                                                                 name="signed_by"
+                                                                defaultValue={query.signed_by}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -213,6 +223,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder=""
                                                                 name="client_printed_name"
+                                                                defaultValue={query.client_printed_name}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}
@@ -225,6 +236,7 @@ const PendingClientSignContract = ({
                                                             <TextInput
                                                                 placeholder=""
                                                                 name="client_title"
+                                                                defaultValue={query.client_title}
                                                                 onChange={onInputChange}
                                                                 size="sm"
                                                                 style={textInputStyle}

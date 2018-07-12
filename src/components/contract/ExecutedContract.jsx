@@ -8,10 +8,10 @@ import Card from 'gumdrops/Card';
 import CardBlock from 'gumdrops/CardBlock';
 
 const FONT_FAMILY = '-webkit-pictograph';
-const SIGN_FONT_FAMILY = 'cursive';
+const SIGN_FONT_FAMILY = 'Quintessential';
 const YMD = 'YYYY-MM-DD';
 
-const tableThStyle={ height: '', width: '20%', fontWeight: 'bold' };
+const tableThStyle = { height: '', width: '20%', fontWeight: 'bold' };
 const tableTdStyle = { width: '80%'};
 const staticTextStyle = {backgroundColor: '#EAECEE',padding: '6px',borderRadius: '3px'}
 

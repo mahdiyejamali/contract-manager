@@ -28,6 +28,7 @@ const defaultPendingClientSignQuery = {
     client_printed_name: 'CLIENT NAME',
     client_title: 'Client Title',
     stage: '',
+    signed_by: 'Test User',
     signed_at: TODAY
 }
 
@@ -40,7 +41,7 @@ class Contract extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            query: defaultPendingClientSignQuery,
+            query: {},
             errors: {},
             min_date: null,
             max_date: null,
