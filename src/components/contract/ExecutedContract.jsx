@@ -1,38 +1,26 @@
 import React from 'react';
 import moment from 'moment';
-import ButtonGroup from 'gumdrops/ButtonGroup';
 import Button from 'gumdrops/Button';
 import LayoutContainer from 'gumdrops/LayoutContainer';
 import Row from 'gumdrops/Row';
 import Column from 'gumdrops/Column';
 import Card from 'gumdrops/Card';
 import CardBlock from 'gumdrops/CardBlock';
-import FormGroupTextHelp from 'gumdrops/FormGroupTextHelp';
-import TextInput from 'gumdrops/TextInput';
-
-import DateInput from '../common/DateInput.jsx';
 
 const FONT_FAMILY = '-webkit-pictograph';
 const SIGN_FONT_FAMILY = 'cursive';
 const YMD = 'YYYY-MM-DD';
-const TODAY = moment().format(YMD);
 
-const tableThStyle={ height: '', width: '20%' };
+const tableThStyle={ height: '', width: '20%', fontWeight: 'bold' };
 const tableTdStyle = { width: '80%'};
-const textInputStyle = { backgroundColor: 'aliceblue' };
 const staticTextStyle = {backgroundColor: '#EAECEE',padding: '6px',borderRadius: '3px'}
 
-const PendingFinalSignContract = ({
+const ExecutedContract = ({
     query,
     contract,
-    min_date,
-    errors,
-    handleDateChange,
-    onInputChange,
-    onSubmit,
     onBackClick
 }) => {
-    const { executed_at, executed_by} = query;
+
     return (
         <div className="-p-t-3">
             <LayoutContainer>
@@ -158,13 +146,7 @@ const PendingFinalSignContract = ({
 
                                                         <th className="-p-l-1" style={{ width: '10%', textAlign: 'left' }}>By:</th>
                                                         <td style={{ width: '40%' }}>
-                                                            <TextInput
-                                                                placeholder=""
-                                                                name="executed_by"
-                                                                onChange={onInputChange}
-                                                                size="sm"
-                                                                style={textInputStyle}
-                                                            />
+                                                            <b style={staticTextStyle}>{contract && contract.executed_by}</b>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -175,13 +157,7 @@ const PendingFinalSignContract = ({
 
                                                         <th className="-p-l-1" style={{ width: '10%', textAlign: 'left' }}>Printed Name:</th>
                                                         <td style={{ width: '40%' }}>
-                                                            <TextInput
-                                                                placeholder=""
-                                                                name="executor_printed_name"
-                                                                onChange={onInputChange}
-                                                                size="sm"
-                                                                style={textInputStyle}
-                                                            />
+                                                            <b style={staticTextStyle}>{contract && contract.executor_printed_name}</b>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -192,13 +168,7 @@ const PendingFinalSignContract = ({
 
                                                         <th className="-p-l-1" style={{ width: '10%', textAlign: 'left' }}>Title:</th>
                                                         <td style={{ width: '40%' }}>
-                                                            <TextInput
-                                                                placeholder=""
-                                                                name="executor_title"
-                                                                onChange={onInputChange}
-                                                                size="sm"
-                                                                style={textInputStyle}
-                                                            />
+                                                            <b style={staticTextStyle}>{contract && contract.executor_title}</b>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -209,16 +179,7 @@ const PendingFinalSignContract = ({
 
                                                         <th className="-p-l-1" style={{ width: '10%', textAlign: 'left' }}>Date:</th>
                                                         <td style={{ width: '40%' }}>
-                                                            <DateInput
-                                                                selected={executed_at && moment(executed_at, YMD)}
-                                                                onChange={(date) => handleDateChange(date, 'executed_at')}
-                                                                minDate={min_date}
-                                                                size="sm"
-                                                                isClearable={false}
-                                                            />
-                                                            {errors && errors.executed_at &&
-                                                                <FormGroupTextHelp text={errors.executed_at} />
-                                                            }
+                                                            <b style={staticTextStyle}>{contract && contract.executed_at && moment(contract.executed_at).format(YMD)}</b>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -229,24 +190,11 @@ const PendingFinalSignContract = ({
 
                                                         <th className="-p-l-1" style={{ width: '10%', textAlign: 'left' }}>Signature:</th>
                                                         <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center' }}>
-                                                            <span>{executed_by}</span>
+                                                            <span>{contract && contract.executed_by}</span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </Column>
-                                    </Row>
-                                    <Row className="-m-t-3">
-                                        <Column md="2" style={{ float: 'right' }}>
-                                            <Button
-                                                group
-                                                size="sm"
-                                                context="success"
-                                                onClick={onSubmit}
-                                                style={{ float: 'right' }}
-                                            >
-                                                Submit
-                                            </Button>
                                         </Column>
                                     </Row>
                                 </div>
@@ -259,4 +207,4 @@ const PendingFinalSignContract = ({
     );
 }
 
-export default PendingFinalSignContract;
+export default ExecutedContract;

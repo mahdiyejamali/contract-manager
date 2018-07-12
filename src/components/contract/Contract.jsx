@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-import SignaturePad from 'react-signature-pad';
-
 import { errorHandler, parseResponse } from "../../helpers/fetchHelpers.js";
 import PendingClientSignContract from './PendingClientSignContract';
 import PendingFinalSignContract from './PendingFinalSignContract';
+import ExecutedContract from './ExecutedContract';
 
 const YMD = 'YYYY-MM-DD';
 const TODAY = moment().format(YMD);
@@ -17,15 +16,17 @@ const PENDING_FINAL_SIGN = 'PENDING_FINAL_SIGN';
 const EXECUTED = 'EXECUTED';
 
 const defaultPendingClientSignQuery = {
-    entity_name: '',
-    mailing_address: '',
-    contact_name: '',
-    contact_title: '',
-    contact_phone: '',
-    contact_email: '',
-    billing_contact: '',
-    billing_phone: '',
-    billing_email: '',
+    entity_name: 'Entity Name',
+    mailing_address: '12454 Santa Monica',
+    contact_name: 'Contact Name',
+    contact_title: 'Contact Title',
+    contact_phone: '(323)123-1011',
+    contact_email: 'cotact@gmail.com',
+    billing_contact: 'Billing Contact',
+    billing_phone: '(323)123-1011',
+    billing_email: 'billing@gmail.com',
+    client_printed_name: 'CLIENT NAME',
+    client_title: 'Client Title',
     stage: '',
     signed_at: TODAY
 }
@@ -57,11 +58,21 @@ class Contract extends Component {
             .then(parseResponse)
             .then(
                 response => {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        contract: response,
-                        query: response.stage === PENDING_CLIENT_SIGN ? defaultPendingClientSignQuery : defaultPendingFinalSignQuery
-                    }))
+                    this.setState(prevState => {
+                        let query = {};
+
+                        if (response.stage === PENDING_CLIENT_SIGN) {
+                            query = defaultPendingClientSignQuery;
+                        } else if (response.stage === PENDING_FINAL_SIGN) {
+                            query = defaultPendingFinalSignQuery;
+                        }
+
+                        return {
+                            ...prevState,
+                            contract: response,
+                            query
+                        }
+                    })
                 },
                 error => {
                     console.log('contract fetch error : ', error);
@@ -76,44 +87,9 @@ class Contract extends Component {
         this.props.history.push('/');
     }
 
-    // _onClearSignature = () => {
-    //     let signature = this.refs.mySignature;
-    //     signature.clear();
-    // }
-
-    // _onSign = () => {
-    //     let signature = this.refs.mySignature;
-
-    //     if (signature.isEmpty()) {
-    //         return false;
-    //     }
-
-    //     this.setState(prevState => ({
-    //         ...prevState,
-    //         query: {
-    //             ...prevState.query,
-    //             client_signature_image_url: signature.toDataURL()
-    //         }
-    //     }));
-    // }
-
-    // _handleFocus(text) {
-    //     console.log('Focused with text: ' + text);
-    // }
-
-    // _handleFocusOut(text, field) {
-    //     if (text.trim() === '') {
-    //         alert('test');
-    //     }
-
-    //     this.setState(prevState => ({
-    //         ...prevState,
-    //         query: {
-    //             ...prevState.query,
-    //             [field]: text.trim() === '' ? prevState.query[field] : text
-    //         }
-    //     }))
-    // }
+    _openSuccessPage = () => {
+        this.props.history.push('/success');
+    }
 
     _onInputChange = ({ target }) => {
         const { name, value } = target;
@@ -125,16 +101,6 @@ class Contract extends Component {
             }
         }))
     }
-
-    // _removeSignature = () => {
-    //     this.setState(prevState => ({
-    //         ...prevState,
-    //         query: {
-    //             ...prevState.query,
-    //             client_signature_image_url: ''
-    //         }
-    //     }))
-    // }
 
     _handleDateChange = (date, field) => {
         this.setState(prevState => ({
@@ -205,7 +171,11 @@ class Contract extends Component {
             .then(parseResponse)
             .then(
                 response => {
-                    this.props.history.push('/success')
+                    if (stage === PENDING_FINAL_SIGN) {
+                        this._openSuccessPage();
+                    } else if (stage === EXECUTED) {
+                        this._onBackClick()
+                    }
                 },
                 error => {
                     console.log(error);
@@ -244,10 +214,14 @@ class Contract extends Component {
                     handleDateChange={this._handleDateChange}
                     onInputChange={this._onInputChange}
                     onSubmit={this._onSubmit}
+                    onBackClick={this._onBackClick}
                 />
             } else {
-                // Retun all text contract no edit
-                return null;
+                return <ExecutedContract 
+                    query={query}
+                    contract={contract}
+                    onBackClick={this._onBackClick}
+                />
             }
         }
     }

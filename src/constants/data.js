@@ -45,7 +45,7 @@ module.exports = {
         {
             stage: 'EXECUTED',
             description: 'Executed',
-            class: 'gds-tag--success'
+            class: 'gds-tag--darkgreen'
         },
         {
             stage: 'PASSED_END_DATE',

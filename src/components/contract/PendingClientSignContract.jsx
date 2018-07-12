@@ -18,6 +18,7 @@ const YMD = 'YYYY-MM-DD';
 const tableThStyle={ height: '', width: '20%' };
 const tableTdStyle = { width: '80%'};
 const textInputStyle = { backgroundColor: 'aliceblue' };
+const staticTextStyle = { backgroundColor: '#EAECEE', padding: '6px', borderRadius: '3px' }
 
 const PendingClientSignContract = ({
     query, 
@@ -164,20 +165,20 @@ const PendingClientSignContract = ({
                                                         <th style={tableThStyle}>The services:</th>
                                                         <td style={tableTdStyle}>
                                                             All Services shall be performed in accordance with Exhibit B attached hereto.
-                                                            </td>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th style={tableThStyle}>Valuation Period:</th>
                                                         <td style={tableTdStyle}>
-                                                            Measured Exposure collection and analysis shall commence on <b>{contract && contract.start_date}</b> and
-                                                                will continue through <b>{contract && contract.end_date}</b>.
-                                                            </td>
+                                                            Measured Exposure collection and analysis shall commence on <b style={staticTextStyle}>{contract && contract.start_date}</b> and
+                                                                will continue through <b style={staticTextStyle}>{contract && contract.end_date}</b>.
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th style={tableThStyle}>Fee:</th>
                                                         <td style={tableTdStyle}>
-                                                            <b>${contract && contract.total_fee}</b> - The Fee shall be invoiced in full upon execution of the Agreement.
-                                                            </td>
+                                                            <b style={staticTextStyle}>${contract && contract.total_fee}</b> - The Fee shall be invoiced in full upon execution of the Agreement.
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
