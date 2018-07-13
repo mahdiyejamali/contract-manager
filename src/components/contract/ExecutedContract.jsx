@@ -45,7 +45,7 @@ const ExecutedContract = ({
                                                 This Media Valuation Services Agreement (the “Agreement”) is entered into by and between GumGum, Inc.
                                                 (“GumGum Sports”) with offices located at 1314 7 th Street, 4 th Floor, Santa Monica, California 90401 and the
                                                 Client identified below.
-                                                </p>
+                                            </p>
 
                                             <table style={{ width: '100%', paddingTop: '20px' }}>
                                                 <tbody>

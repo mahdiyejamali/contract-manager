@@ -38,6 +38,11 @@ module.exports = {
             class: 'gds-tag--warning'
         },
         {
+            stage: 'IN_REVIEW',
+            description: 'In Review',
+            class: 'gds-tag--blue'
+        },
+        {
             stage: 'PENDING_FINAL_SIGN',
             description: 'Pending Final Signature',
             class: 'gds-tag--purple'

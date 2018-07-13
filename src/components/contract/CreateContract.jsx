@@ -88,11 +88,6 @@ class CreateContract extends Component {
             }
         });
 
-        if (!query.deliverables || !query.deliverables.trim()) {
-            createNotification('error', 'Please fill out deliverables section.');
-            errors.deliverables = 'This field is required';
-        }
-
         if (parseInt(query.total_fee) <= 0) {
             errors.total_fee = 'Total fee can not be less than or equal to zero.'
         }
@@ -104,21 +99,6 @@ class CreateContract extends Component {
 
         return errors;
     };
-
-    // _getHighlighted(text, higlight) {
-    //     const ratio = deliverablesClauses[higlight];
-    //     console.log(ratio);
-    //     const color = colorCodes[ratio] ? colorCodes[ratio] : '';
-    //     console.log(color);
-    //     // Split on higlight term and include term into parts, ignore case
-    //     let parts = text.split(new RegExp(`(${higlight})`, 'gi'));
-    //     const result = <span> {parts.map((part, i) =>
-    //         <span key={i} style={part.toLowerCase() === higlight.toLowerCase() ? { backgroundColor: `${color}` } : {}}>
-    //             {part}
-    //         </span>)
-    //     } </span>;
-    //     return result;
-    // }
 
     _updateHighlightColors = () => {
         let domNodes = document.getElementsByClassName('YourHighlightClass');
@@ -220,7 +200,10 @@ class CreateContract extends Component {
     }
 
     render() {
-        const { users, clients, contract_types, query, errors, query: { start_date, end_date, deliverables }, min_date, showDeliverablesDiv } = this.state;
+        const { users, clients, contract_types, query, errors, 
+            query: { start_date, end_date, deliverables, data_protection }, 
+            min_date, showDeliverablesDiv
+        } = this.state;
         return (
             <div className="-p-t-3">
                 <LayoutContainer>
@@ -302,7 +285,7 @@ class CreateContract extends Component {
                                                 </FormGroup>
                                             </Column>
                                         </Row>
-                                        <Row>
+                                        {/* <Row>
                                             <Column md="12">
                                                 <center style={{ fontWeight: 'bold', paddingTop: '20px' }}>Exhibit B: Description of Services<br /></center>
                                             </Column>
@@ -314,7 +297,7 @@ class CreateContract extends Component {
                                                     {showDeliverablesDiv ? 
                                                     <div
                                                         onDoubleClick={this._toggleDeliverablesDiv}
-                                                        style={{ border: '1px solid', height: '200px', padding: '10px'}}
+                                                        style={{ border: '1px solid', height: '200px', padding: '15px'}}
                                                     >  
                                                     <Highlighter
                                                         highlightClassName="YourHighlightClass"
@@ -330,13 +313,13 @@ class CreateContract extends Component {
                                                         defaultValue={deliverables}
                                                         onChange={this._onInputChange}
                                                         onBlur={this._toggleDeliverablesDiv}
-                                                        style={{height: '200px'}}
+                                                        style={{ height: '200px', lineHeight: '1.9em'}}
                                                         className={showDeliverablesDiv ? '-vis-hidden' : ''}
                                                     />
                                                     }
                                                 </FormGroup>
                                             </Column>
-                                        </Row>
+                                        </Row> */}
                                         <Row>
                                             <Column md="3">
                                                 <FormGroup>

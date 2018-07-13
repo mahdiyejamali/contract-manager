@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import ButtonGroup from 'gumdrops/ButtonGroup';
 import Button from 'gumdrops/Button';
 import LayoutContainer from 'gumdrops/LayoutContainer';
 import Row from 'gumdrops/Row';
@@ -21,7 +20,7 @@ const tableTdStyle = { width: '80%'};
 const textInputStyle = { backgroundColor: 'aliceblue' };
 const staticTextStyle = { backgroundColor: '#EAECEE', padding: '6px', borderRadius: '3px' }
 
-const PendingClientSignContract = ({
+const InReviewContract = ({
     query, 
     contract, 
     min_date, 
@@ -31,8 +30,8 @@ const PendingClientSignContract = ({
     onParagraphMouseEnter,
     onParagraphMouseLeave,
     onParagraphClick,
-    onReview,
-    onSubmit
+    onApprove,
+    onBackClick
 }) => {
     const { signed_at, signed_by } = query;
     return (
@@ -40,6 +39,11 @@ const PendingClientSignContract = ({
             <LayoutContainer>
                 <Row>
                     <Column>
+                        <div className="gds-flex gds-flex--justify-between">
+                            <Button size="sm" context="success" onClick={onBackClick}>
+                                Home
+                            </Button>
+                        </div>
                         <Card>
                             <CardBlock>
                                 <div className="-m-a-5" style={{ fontFamily: FONT_FAMILY, textAlign: 'left' }}>
@@ -54,7 +58,7 @@ const PendingClientSignContract = ({
                                                 This Media Valuation Services Agreement (the “Agreement”) is entered into by and between GumGum, Inc.
                                                 (“GumGum Sports”) with offices located at 1314 7 th Street, 4 th Floor, Santa Monica, California 90401 and the
                                                 Client identified below.
-                                            </p>
+                                                </p>
 
                                             <table style={{ width: '100%', paddingTop: '20px' }}>
                                                 <tbody>
@@ -204,7 +208,7 @@ const PendingClientSignContract = ({
                                                 This Agreement, including any applicable Exhibits, contains all terms and conditions which govern our contractual
                                                 relationship. By signing below both parties are acknowledging that they have each read and hereby accept the
                                                 terms stated herein, and that each party is duly authorized to bind its company to this Agreement.
-                                                <br />
+                                                    <br />
                                                 ACCEPTED AND AGREED:
                                                 </p>
                                             <table style={{ width: '50%' }} className="-p-t-1 -p-b-1">
@@ -275,9 +279,9 @@ const PendingClientSignContract = ({
                                     </Row>
                                     <Row>
                                         <Column md="6">
-                                            <p 
+                                            <p
                                                 name="p-1"
-                                                onMouseEnter={onParagraphMouseEnter} 
+                                                onMouseEnter={onParagraphMouseEnter}
                                                 onMouseLeave={onParagraphMouseLeave}
                                                 onClick={onParagraphClick}
                                             >
@@ -299,7 +303,7 @@ const PendingClientSignContract = ({
                                             </p>
                                         </Column>
                                         <Column md="6">
-                                            <p 
+                                            <p
                                                 name="p-2"
                                                 onMouseEnter={onParagraphMouseEnter} 
                                                 onMouseLeave={onParagraphMouseLeave}
@@ -326,26 +330,16 @@ const PendingClientSignContract = ({
                                         </Column>
                                     </Row>
                                     <Row className="-m-t-3">
-                                        <Column md="4" style={{ float: 'right' }}>
-                                            <ButtonGroup style={{ float: 'right', right: '0' }}>
-                                            <Button
-                                                group
-                                                size="sm"
-                                                context="warning"
-                                                onClick={onReview}
-                                            >
-                                                Request Review
-                                            </Button>
+                                        <Column md="2" style={{ float: 'right' }}>
                                             <Button
                                                 group
                                                 size="sm"
                                                 context="success"
-                                                onClick={onSubmit}
-                                                
+                                                onClick={onApprove}
+                                                style={{ float: 'right' }}
                                             >
-                                                Submit
+                                                Approve
                                             </Button>
-                                            </ButtonGroup>
                                         </Column>
                                     </Row>
                                 </div>
@@ -358,4 +352,4 @@ const PendingClientSignContract = ({
     );
 }
 
-export default PendingClientSignContract;
+export default InReviewContract;
