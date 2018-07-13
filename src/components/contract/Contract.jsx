@@ -27,19 +27,19 @@ const onEnterParagraphStyle = "background-color:#FCF3CF;cursor:pointer";
 const onLeaveParagraphStyle = "";
 
 const defaultPendingClientSignQuery = {
-    entity_name: 'Entity Name',
+    entity_name: 'Sports Contract',
     mailing_address: '12454 Santa Monica',
-    contact_name: 'Contact Name',
-    contact_title: 'Contact Title',
+    contact_name: 'Allen Jones',
+    contact_title: 'Contract Manager',
     contact_phone: '(323)123-1011',
     contact_email: 'cotact@gmail.com',
-    billing_contact: 'Billing Contact',
+    billing_contact: 'Jane Zhang',
     billing_phone: '(323)123-1011',
     billing_email: 'billing@gmail.com',
-    client_printed_name: 'CLIENT NAME',
-    client_title: 'Client Title',
+    client_printed_name: 'ALLEN JONES',
+    client_title: 'Contract Manager',
     stage: '',
-    signed_by: 'Test User',
+    signed_by: 'Allen Jones',
     signed_at: TODAY
 }
 
@@ -111,7 +111,17 @@ class Contract extends Component {
                     this.setState(prevState => ({
                         ...prevState,
                         fetchedNotes: response.filter(note => note.contractId === prevState.contractId)
-                    }))
+                    }), () => {
+                            if (this.state.contract && this.state.contract.stage === IN_REVIEW) {
+                                this.state.fetchedNotes.forEach(note => {
+                                let target = document.getElementsByName(note.sectionId)[0];
+                                if (target) {
+                                    target.setAttribute('style', onEnterParagraphStyle)
+                                }
+                            })
+                        }
+                        
+                    })
                 },
                 error => {
                     console.log('notes fetch error : ', error);
@@ -306,7 +316,7 @@ class Contract extends Component {
     }
 
     _onParagraphMouseEnterReview = ({target}) => {
-        target.setAttribute('style', "cursor: pointer;")
+        
     }
 
     _onParagraphMouseEnter = ({target}) => {

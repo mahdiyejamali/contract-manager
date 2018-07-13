@@ -184,12 +184,12 @@ const ExecutedContract = ({
                                                     </tr>
                                                     <tr>
                                                         <th style={{ width: '10%', textAlign: 'left' }}>Signature:</th>
-                                                        <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center' }}>
+                                                        <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center', fontSize: '30px' }}>
                                                             <b>{contract && contract.signed_by}</b>
                                                         </td>
 
                                                         <th className="-p-l-1" style={{ width: '10%', textAlign: 'left' }}>Signature:</th>
-                                                        <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center' }}>
+                                                        <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center', fontSize: '30px' }}>
                                                             <span>{contract && contract.executed_by}</span>
                                                         </td>
                                                     </tr>

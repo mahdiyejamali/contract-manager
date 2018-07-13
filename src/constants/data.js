@@ -10,24 +10,24 @@ module.exports = {
     users: [
         {
             value: '1',
-            name: 'User 1',
+            name: 'TJ Albert',
             email: 'mahdiye@gumgum.com'
         },
         {
             value: '2',
-            name: 'User 2',
+            name: 'Mallory C',
             email: 'mahdiye@gumgum.com'
         }
     ],
     clients: [
         {
             value: '11',
-            name: 'Client 1',
+            name: 'Mahdiye J',
             email: 'mahdiye@gumgum.com'
         },
         {
             value: '22',
-            name: 'Client 2',
+            name: 'Lauren D',
             email: 'mahdiye@gumgum.com'
         }
     ],

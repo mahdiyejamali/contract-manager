@@ -269,7 +269,7 @@ const InReviewContract = ({
                                                     </tr>
                                                     <tr>
                                                         <th style={{ width: '10%', textAlign: 'left' }}>Signature:</th>
-                                                        <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center' }}>
+                                                        <td style={{ width: '40%', border: 'solid 1px', fontFamily: SIGN_FONT_FAMILY, textAlign: 'center', fontSize: '30px' }}>
                                                             <span>{signed_by}</span>
                                                         </td>
                                                     </tr>
@@ -281,8 +281,6 @@ const InReviewContract = ({
                                         <Column md="6">
                                             <p
                                                 name="p-1"
-                                                onMouseEnter={onParagraphMouseEnter}
-                                                onMouseLeave={onParagraphMouseLeave}
                                                 onClick={onParagraphClick}
                                             >
                                                 Data Protection. If applicable, each Party shall comply with all
@@ -305,8 +303,6 @@ const InReviewContract = ({
                                         <Column md="6">
                                             <p
                                                 name="p-2"
-                                                onMouseEnter={onParagraphMouseEnter} 
-                                                onMouseLeave={onParagraphMouseLeave}
                                                 onClick={onParagraphClick}
                                             >
                                                 Each party (the “Indemnifying Party”) agrees to
