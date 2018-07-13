@@ -64,7 +64,6 @@ class Contract extends Component {
 
     componentDidMount() {
         this._fetchContract();
-        this._fetchNotes();
 
         const { match: { params } } = this.props;
         this.setState({contractId: params.id});
@@ -91,7 +90,7 @@ class Contract extends Component {
                             contract: response,
                             query
                         }
-                    })
+                    }, () => this._fetchNotes())
                 },
                 error => {
                     console.log('contract fetch error : ', error);
@@ -112,8 +111,8 @@ class Contract extends Component {
                         ...prevState,
                         fetchedNotes: response.filter(note => note.contractId === prevState.contractId)
                     }), () => {
-                            if (this.state.contract && this.state.contract.stage === IN_REVIEW) {
-                                this.state.fetchedNotes.forEach(note => {
+                        if (this.state.contract && this.state.contract.stage === IN_REVIEW) {
+                            this.state.fetchedNotes.forEach(note => {
                                 let target = document.getElementsByName(note.sectionId)[0];
                                 if (target) {
                                     target.setAttribute('style', onEnterParagraphStyle)
@@ -138,6 +137,10 @@ class Contract extends Component {
 
     _openSuccessPage = () => {
         this.props.history.push('/success');
+    }
+
+    _openReviewSuccessPage = () => {
+        this.props.history.push('/review-success');
     }
 
     _onInputChange = ({ target }) => {
@@ -207,7 +210,7 @@ class Contract extends Component {
             .then(
                 response => {
                     if (stage === IN_REVIEW) {
-                        this._openSuccessPage();
+                        this._openReviewSuccessPage();
                     } else {
                         this._onBackClick();
                     }
@@ -328,13 +331,17 @@ class Contract extends Component {
     }
 
     _saveNote = (sectionId, note) => {
+        if (!note) {
+            return false;
+        }
+
         const {contractId} = this.state;
         let notes = this.state.notes.filter(note => note.sectionId !== sectionId);
 
         this.setState(prevState => ({
             ...prevState,
             notes: notes.concat({contractId, sectionId, note})
-        }), () => console.log(this.state.notes))
+        }), createNotification('success', 'Note Added Successfully.'))
     }
 
     _onParagraphClick = ({target}) => {
